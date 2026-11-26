@@ -1,12 +1,16 @@
 package com.example.budgetetudiant;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private TextView tvTotal;
     private List<Expense> expenses;
+    private ProgressBar progressBudget;
+    private TextView tvBudget;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         db = new DBHelper(this);
         listView = findViewById(R.id.listExpenses);
         tvTotal = findViewById(R.id.tvTotal);
+        progressBudget = findViewById(R.id.progressBudget);
+        tvBudget = findViewById(R.id.tvBudget);
+        prefs = getSharedPreferences("budget_prefs", MODE_PRIVATE);
 
+        findViewById(R.id.btnBudget).setOnClickListener(v -> showBudgetDialog());
         findViewById(R.id.btnAdd).setOnClickListener(v -> showAddDialog());
         findViewById(R.id.btnConverter).setOnClickListener(v ->
                 startActivity(new Intent(this, ConverterActivity.class)));
@@ -67,7 +78,31 @@ public class MainActivity extends AppCompatActivity {
         expenses = db.getAll();
         listView.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, expenses));
-        tvTotal.setText(String.format("Total : %.2f TND", db.total()));
+
+        double total = db.total();
+        float budget = prefs.getFloat("budget", 0);
+        tvTotal.setText(String.format("Total : %.2f TND", total));
+
+        if (budget <= 0) {
+            tvBudget.setText("Budget non défini");
+            tvBudget.setTextColor(Color.GRAY);
+            tvTotal.setTextColor(Color.BLACK);
+            progressBudget.setProgress(0);
+        } else {
+            int percent = (int) Math.min(100, (total / budget) * 100);
+            progressBudget.setProgress(percent);
+            if (total > budget) {
+                tvTotal.setTextColor(Color.RED);
+                tvBudget.setTextColor(Color.RED);
+                tvBudget.setText(String.format("⚠ Budget dépassé de %.2f TND (budget : %.2f)",
+                        total - budget, budget));
+            } else {
+                tvTotal.setTextColor(Color.BLACK);
+                tvBudget.setTextColor(Color.DKGRAY);
+                tvBudget.setText(String.format("Reste : %.2f TND sur %.2f (%d%%)",
+                        budget - total, budget, percent));
+            }
+        }
     }
 
     private void showAddDialog() {
@@ -89,6 +124,24 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
                     db.add(title, Double.parseDouble(amountStr), sp.getSelectedItem().toString());
+                    refresh();
+                })
+                .setNegativeButton("Annuler", null)
+                .show();
+    }
+
+    private void showBudgetDialog() {
+        EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setHint("Ex : 500");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Budget mensuel (TND)")
+                .setView(input)
+                .setPositiveButton("Enregistrer", (d, w) -> {
+                    String s = input.getText().toString().trim();
+                    if (s.isEmpty()) return;
+                    prefs.edit().putFloat("budget", Float.parseFloat(s)).apply();
                     refresh();
                 })
                 .setNegativeButton("Annuler", null)

@@ -16,11 +16,33 @@
         android:gravity="center"
         android:padding="16dp" />
 
+    <ProgressBar
+        android:id="@+id/progressBudget"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0" />
+
+    <TextView
+        android:id="@+id/tvBudget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Budget non défini"
+        android:gravity="center"
+        android:padding="8dp" />
+
     <ListView
         android:id="@+id/listExpenses"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnBudget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Définir le budget mensuel" />
 
     <Button
         android:id="@+id/btnAdd"
