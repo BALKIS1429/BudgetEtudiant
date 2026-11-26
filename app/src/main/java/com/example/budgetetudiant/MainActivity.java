@@ -1,150 +1,169 @@
 package com.example.budgetetudiant;
 
+import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
-import java.util.List;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Activité hôte : navigation principale à cinq sections et accès rapide à
+ * l'ajout de dépense.
+ */
+public class MainActivity extends BaseActivity {
 
-    private DBHelper db;
-    private ListView listView;
-    private TextView tvTotal;
-    private List<Expense> expenses;
-    private ProgressBar progressBudget;
-    private TextView tvBudget;
-    private SharedPreferences prefs;
+    public static final String EXTRA_OPEN_TAB = "open_tab";
+    private static final int PERMISSION_REQUEST_NOTIFICATION = 201;
+    private static final String STATE_TAB = "state_tab";
+
+    private BottomNavigationView bottomNavigation;
+    private ExtendedFloatingActionButton fabAdd;
+    private int currentTab = R.id.nav_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        applyInsets(R.id.main);
 
-        db = new DBHelper(this);
-        listView = findViewById(R.id.listExpenses);
-        tvTotal = findViewById(R.id.tvTotal);
-        progressBudget = findViewById(R.id.progressBudget);
-        tvBudget = findViewById(R.id.tvBudget);
-        prefs = getSharedPreferences("budget_prefs", MODE_PRIVATE);
+        NotificationHelper.createNotificationChannel(this);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        fabAdd = findViewById(R.id.fab_add);
 
-        findViewById(R.id.btnBudget).setOnClickListener(v -> showBudgetDialog());
-        findViewById(R.id.btnAdd).setOnClickListener(v -> showAddDialog());
-        findViewById(R.id.btnConverter).setOnClickListener(v ->
-                startActivity(new Intent(this, ConverterActivity.class)));
-
-        listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            Expense e = expenses.get(position);
-            new AlertDialog.Builder(this)
-                    .setTitle("Supprimer ?")
-                    .setMessage(e.title)
-                    .setPositiveButton("Oui", (d, w) -> {
-                        db.delete(e.id);
-                        refresh();
-                    })
-                    .setNegativeButton("Non", null)
-                    .show();
+        fabAdd.setOnClickListener(v -> openAddExpense());
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            showTab(item.getItemId());
             return true;
         });
 
-        refresh();
+        if (savedInstanceState != null) {
+            currentTab = savedInstanceState.getInt(STATE_TAB, R.id.nav_home);
+        }
+        bottomNavigation.setSelectedItemId(currentTab);
+
+        handleIntent(getIntent());
+        getWindow().getDecorView().post(this::requestNotificationPermissionIfNeeded);
     }
 
-    private void refresh() {
-        expenses = db.getAll();
-        listView.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, expenses));
-
-        double total = db.total();
-        float budget = prefs.getFloat("budget", 0);
-        tvTotal.setText(String.format("Total : %.2f TND", total));
-
-        if (budget <= 0) {
-            tvBudget.setText("Budget non défini");
-            tvBudget.setTextColor(Color.GRAY);
-            tvTotal.setTextColor(Color.BLACK);
-            progressBudget.setProgress(0);
+    private void showTab(int itemId) {
+        currentTab = itemId;
+        Fragment fragment;
+        if (itemId == R.id.nav_expenses) {
+            fragment = new ExpensesFragment();
+        } else if (itemId == R.id.nav_savings) {
+            fragment = new SavingsFragment();
+        } else if (itemId == R.id.nav_stats) {
+            fragment = new StatisticsFragment();
+        } else if (itemId == R.id.nav_profile) {
+            fragment = new SettingsFragment();
         } else {
-            int percent = (int) Math.min(100, (total / budget) * 100);
-            progressBudget.setProgress(percent);
-            if (total > budget) {
-                tvTotal.setTextColor(Color.RED);
-                tvBudget.setTextColor(Color.RED);
-                tvBudget.setText(String.format("⚠ Budget dépassé de %.2f TND (budget : %.2f)",
-                        total - budget, budget));
-            } else {
-                tvTotal.setTextColor(Color.BLACK);
-                tvBudget.setTextColor(Color.DKGRAY);
-                tvBudget.setText(String.format("Reste : %.2f TND sur %.2f (%d%%)",
-                        budget - total, budget, percent));
+            fragment = new DashboardFragment();
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+
+        boolean showFab = itemId == R.id.nav_home || itemId == R.id.nav_expenses;
+        fabAdd.setVisibility(showFab ? View.VISIBLE : View.GONE);
+    }
+
+    /** Permet aux fragments d'ouvrir un onglet précis. */
+    public void selectTab(int itemId) {
+        if (bottomNavigation.getSelectedItemId() == itemId) {
+            showTab(itemId);
+        } else {
+            bottomNavigation.setSelectedItemId(itemId);
+        }
+    }
+
+    public void openAddExpense() {
+        startActivity(new Intent(this, AddEditExpenseActivity.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NotificationHelper.checkBudgetAlerts(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        String tab = intent.getStringExtra(EXTRA_OPEN_TAB);
+        if (tab == null) {
+            return;
+        }
+        intent.removeExtra(EXTRA_OPEN_TAB);
+        switch (tab) {
+            case "expenses":
+                selectTab(R.id.nav_expenses);
+                break;
+            case "savings":
+                selectTab(R.id.nav_savings);
+                break;
+            case "stats":
+                selectTab(R.id.nav_stats);
+                break;
+            case "profile":
+                selectTab(R.id.nav_profile);
+                break;
+            default:
+                selectTab(R.id.nav_home);
+                break;
+        }
+    }
+
+    public void requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return;
+        }
+        if (!AppPreferences.areNotificationsEnabled(this)) {
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                    PERMISSION_REQUEST_NOTIFICATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_NOTIFICATION) {
+            if (grantResults.length > 0
+                    && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                AppPreferences.setNotificationsEnabled(this, false);
+                Toast.makeText(this, R.string.permission_notifications_denied,
+                        Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void showAddDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add, null);
-        EditText etTitle = view.findViewById(R.id.etTitle);
-        EditText etAmount = view.findViewById(R.id.etAmount);
-        Spinner sp = view.findViewById(R.id.spCategory);
-        sp.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-                new String[]{"Nourriture", "Transport", "Études", "Loisirs", "Autre"}));
-
-        new AlertDialog.Builder(this)
-                .setTitle("Nouvelle dépense")
-                .setView(view)
-                .setPositiveButton("Ajouter", (d, w) -> {
-                    String title = etTitle.getText().toString().trim();
-                    String amountStr = etAmount.getText().toString().trim();
-                    if (title.isEmpty() || amountStr.isEmpty()) {
-                        Toast.makeText(this, "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    db.add(title, Double.parseDouble(amountStr), sp.getSelectedItem().toString());
-                    refresh();
-                })
-                .setNegativeButton("Annuler", null)
-                .show();
-    }
-
-    private void showBudgetDialog() {
-        EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        input.setHint("Ex : 500");
-
-        new AlertDialog.Builder(this)
-                .setTitle("Budget mensuel (TND)")
-                .setView(input)
-                .setPositiveButton("Enregistrer", (d, w) -> {
-                    String s = input.getText().toString().trim();
-                    if (s.isEmpty()) return;
-                    prefs.edit().putFloat("budget", Float.parseFloat(s)).apply();
-                    refresh();
-                })
-                .setNegativeButton("Annuler", null)
-                .show();
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(STATE_TAB, currentTab);
+        super.onSaveInstanceState(outState);
     }
 }

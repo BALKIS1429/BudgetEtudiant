@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Palette principale : violet et lavande -->
+    <color name="primary">#6C4AB6</color>
+    <color name="primary_dark">#4B2E83</color>
+    <color name="primary_light">#EDE6F7</color>
+    <color name="primary_soft">#F5F0FC</color>
+    <color name="lavender">#B9A5E3</color>
+    <color name="lavender_light">#F3EEFB</color>
+
+    <!-- Surfaces et texte -->
+    <color name="background">#F8F6FC</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_alt">#FCFAFE</color>
+    <color name="text_primary">#211A2E</color>
+    <color name="text_secondary">#6E687A</color>
+    <color name="text_muted">#9B95A6</color>
+    <color name="card_stroke">#EEE9F5</color>
+    <color name="divider">#F0ECF6</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- États -->
+    <color name="success">#2E9E6B</color>
+    <color name="success_soft">#E6F6EE</color>
+    <color name="danger">#D64545</color>
+    <color name="danger_soft">#FCEBEB</color>
+    <color name="warning">#D99A00</color>
+    <color name="warning_soft">#FFF5DB</color>
+    <color name="info">#4A7BD6</color>
+    <color name="info_soft">#EAF1FC</color>
+
+    <!-- Couleurs des catégories -->
+    <color name="category_food">#F28C5B</color>
+    <color name="category_transport">#5C9DFF</color>
+    <color name="category_studies">#7E57C2</color>
+    <color name="category_leisure">#E0A800</color>
+    <color name="category_health">#38A99A</color>
+    <color name="category_shopping">#E56A9A</color>
+    <color name="category_other">#8E9AAF</color>
+
+    <!-- Couleurs pour les états de budget -->
+    <color name="budget_safe">#2E9E6B</color>
+    <color name="budget_warning">#D99A00</color>
+    <color name="budget_danger">#D64545</color>
 </resources>

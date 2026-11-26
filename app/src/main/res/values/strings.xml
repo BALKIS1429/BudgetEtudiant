@@ -1,3 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BudgetEtudiant</string>
+    <string name="app_name">Budget Étudiant</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Accueil</string>
+    <string name="nav_expenses">Dépenses</string>
+    <string name="nav_savings">Épargne</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_profile">Profil</string>
+
+    <!-- Communs -->
+    <string name="currency">TND</string>
+    <string name="save">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="close">Fermer</string>
+    <string name="add">Ajouter</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="back">Retour</string>
+    <string name="loading">Chargement…</string>
+    <string name="retry">Réessayer</string>
+
+    <!-- Accueil -->
+    <string name="hello">Bonjour</string>
+    <string name="this_month_expenses">DÉPENSES CE MOIS</string>
+    <string name="monthly_budget">Budget mensuel</string>
+    <string name="remaining">Restant</string>
+    <string name="manage_budget">Gérer mon budget</string>
+    <string name="quick_access">Accès rapide</string>
+    <string name="recent_expenses">Dernières dépenses</string>
+    <string name="see_all">Tout voir</string>
+    <string name="no_expense_month">Aucune dépense ce mois-ci</string>
+    <string name="no_expense_hint">Ajoutez votre première dépense pour suivre votre budget.</string>
+    <string name="no_budget">Aucun budget défini</string>
+    <string name="define_budget_hint">Définissez votre budget mensuel pour suivre vos dépenses.</string>
+    <string name="edit_budget">Modifier le budget</string>
+    <string name="quick_add">Ajouter</string>
+    <string name="quick_savings">Épargne</string>
+    <string name="quick_stats">Statistiques</string>
+    <string name="quick_converter">Convertisseur</string>
+    <string name="quick_history">Historique</string>
+    <string name="quick_pdf">Rapport PDF</string>
+
+    <!-- Dépenses -->
+    <string name="expenses_title">Dépenses</string>
+    <string name="search_expense">Rechercher une dépense…</string>
+    <string name="category">Catégorie</string>
+    <string name="month">Mois</string>
+    <string name="sort_by">Trier par</string>
+    <string name="all_categories">Toutes</string>
+    <string name="all_months">Tous les mois</string>
+    <string name="reset_filters">Réinitialiser</string>
+    <string name="sort_date_desc">Date récente</string>
+    <string name="sort_date_asc">Date ancienne</string>
+    <string name="sort_amount_desc">Montant décroissant</string>
+    <string name="sort_amount_asc">Montant croissant</string>
+    <string name="no_expenses">Aucune dépense trouvée</string>
+    <string name="no_expenses_hint">Modifiez vos filtres ou ajoutez une nouvelle dépense.</string>
+    <string name="expense_count">%1$d dépense</string>
+    <string name="expense_count_plural">%1$d dépenses</string>
+
+    <!-- Formulaire dépense -->
+    <string name="new_expense">Nouvelle dépense</string>
+    <string name="edit_expense">Modifier la dépense</string>
+    <string name="expense_title_hint">Titre (ex. Café, Bus…)</string>
+    <string name="amount_hint">Montant en TND</string>
+    <string name="date_hint">Date</string>
+    <string name="save_expense">Enregistrer la dépense</string>
+    <string name="delete_expense">Supprimer la dépense</string>
+    <string name="expense_saved">Dépense enregistrée</string>
+    <string name="expense_updated">Dépense modifiée</string>
+    <string name="expense_deleted">Dépense supprimée</string>
+    <string name="confirm_delete_expense_title">Supprimer cette dépense ?</string>
+    <string name="confirm_delete_expense_msg">Cette action est définitive. La dépense sera retirée de votre historique.</string>
+    <string name="error_title_empty">Saisissez un titre pour la dépense.</string>
+    <string name="error_amount_invalid">Saisissez un montant valide supérieur à 0.</string>
+    <string name="error_date_empty">Choisissez une date.</string>
+    <string name="error_category_empty">Choisissez une catégorie.</string>
+    <string name="amount_note">Tous les montants sont en dinars tunisiens (TND).</string>
+
+    <!-- Budget -->
+    <string name="budget_dialog_title">Définir le budget</string>
+    <string name="budget_dialog_hint">Budget mensuel (TND)</string>
+    <string name="budget_dialog_help">Ce budget s’applique uniquement au mois affiché. Les dépenses des autres mois ne sont pas prises en compte.</string>
+    <string name="budget_saved">Budget mensuel enregistré</string>
+    <string name="error_budget_invalid">Saisissez un budget supérieur à 0.</string>
+    <string name="budget_over">Budget dépassé</string>
+    <string name="budget_reached">Budget atteint</string>
+    <string name="budget_remaining">Il reste %1$s sur %2$s</string>
+    <string name="budget_exceeded_by">Dépassement de %1$s</string>
+    <string name="budget_percent_used">%1$d %% utilisé</string>
+    <string name="no_budget_defined">Aucun budget défini pour ce mois</string>
+
+    <!-- Épargne -->
+    <string name="savings_title">Épargne</string>
+    <string name="savings_subtitle">Construisez votre matelas de sécurité, un montant à la fois.</string>
+    <string name="savings_goal">OBJECTIF D’ÉPARGNE</string>
+    <string name="no_savings_goal">Aucun objectif pour le moment</string>
+    <string name="no_savings_goal_hint">Créez un objectif et ajoutez régulièrement de l’argent pour le voir progresser.</string>
+    <string name="create_savings_goal">Créer mon objectif</string>
+    <string name="saved_amount">Économisé</string>
+    <string name="target_amount">Objectif</string>
+    <string name="remaining_amount">Restant</string>
+    <string name="add_savings">Ajouter un montant</string>
+    <string name="edit_goal">Modifier</string>
+    <string name="manage_goal">Gérer</string>
+    <string name="goal_reached">Félicitations ! Objectif atteint 🎉</string>
+    <string name="goal_reached_hint">Vous avez atteint votre objectif d’épargne. Continuez à économiser ou fixez-vous un nouveau défi.</string>
+    <string name="goal_progress">%1$d %% de progression</string>
+    <string name="goal_target_of">sur %1$s</string>
+    <string name="goal_dialog_title">Objectif d’épargne</string>
+    <string name="goal_name_hint">Nom de l’objectif (ex. Voyage)</string>
+    <string name="goal_amount_hint">Montant cible (TND)</string>
+    <string name="goal_name_default">Mon objectif</string>
+    <string name="goal_saved">Objectif enregistré</string>
+    <string name="error_goal_amount">Saisissez un montant cible supérieur à 0.</string>
+    <string name="add_savings_title">Ajouter à l’épargne</string>
+    <string name="savings_amount_hint">Montant à ajouter (TND)</string>
+    <string name="savings_added">Montant ajouté à votre épargne</string>
+    <string name="error_savings_amount">Saisissez un montant supérieur à 0.</string>
+    <string name="savings_dialog_info">Objectif : %1$s · Déjà économisé : %2$s</string>
+    <string name="reset_goal">Réinitialiser</string>
+    <string name="delete_goal">Supprimer l’objectif</string>
+    <string name="manage_goal_title">Gérer l’objectif</string>
+    <string name="reset_goal_confirm_title">Réinitialiser l’épargne ?</string>
+    <string name="reset_goal_confirm_msg">Le montant économisé sera remis à 0. L’objectif sera conservé.</string>
+    <string name="delete_goal_confirm_title">Supprimer l’objectif ?</string>
+    <string name="delete_goal_confirm_msg">L’objectif et son montant économisé seront supprimés. Vos dépenses ne seront pas affectées.</string>
+    <string name="goal_reset">Épargne réinitialisée</string>
+    <string name="goal_deleted">Objectif supprimé</string>
+
+    <!-- Statistiques -->
+    <string name="stats_title">Statistiques</string>
+    <string name="stats_subtitle">Analysez vos habitudes de dépenses.</string>
+    <string name="total_spent">Total dépensé</string>
+    <string name="this_month">Ce mois</string>
+    <string name="average_expense">Dépense moyenne</string>
+    <string name="top_category">Catégorie principale</string>
+    <string name="category_chart_title">Dépenses par catégorie</string>
+    <string name="category_chart_subtitle">Depuis le début</string>
+    <string name="monthly_chart_title">6 derniers mois</string>
+    <string name="monthly_chart_subtitle">Évolution de vos dépenses</string>
+    <string name="comparison_title">Comparaison avec le mois précédent</string>
+    <string name="no_comparison">Aucune dépense le mois précédent</string>
+    <string name="comparison_up">En hausse de %1$s</string>
+    <string name="comparison_down">En baisse de %1$s</string>
+    <string name="comparison_same">Dépenses stables</string>
+    <string name="comparison_detail">%1$s ce mois · %2$s le mois précédent</string>
+    <string name="no_data_yet">Aucune donnée pour le moment</string>
+    <string name="average_per_month">Moyenne mensuelle : %1$s</string>
+
+    <!-- Historique -->
+    <string name="history_title">Historique</string>
+    <string name="history_subtitle">Retrouvez vos dépenses mois par mois.</string>
+    <string name="history_month_total">TOTAL DU MOIS</string>
+    <string name="history_budget">Budget</string>
+    <string name="history_remaining">Restant</string>
+    <string name="history_count">%1$d dépense(s) ce mois</string>
+    <string name="history_categories">Répartition par catégorie</string>
+    <string name="history_expenses">Détail des dépenses</string>
+    <string name="history_empty">Aucune dépense pour ce mois.</string>
+    <string name="history_comparison_up">En hausse de %1$s par rapport au mois précédent.</string>
+    <string name="history_comparison_down">En baisse de %1$s par rapport au mois précédent.</string>
+    <string name="history_comparison_same">Dépenses stables par rapport au mois précédent.</string>
+    <string name="history_comparison_none">Aucune dépense enregistrée le mois précédent.</string>
+    <string name="percent_of_total">%1$d %% du total</string>
+    <string name="export_pdf">Exporter le rapport PDF</string>
+    <string name="pdf_generating">Génération du rapport…</string>
+    <string name="pdf_error">Impossible de générer le rapport.</string>
+    <string name="share_pdf">Partager le rapport</string>
+
+    <!-- Convertisseur -->
+    <string name="converter_title">Convertisseur</string>
+    <string name="converter_subtitle">Convertissez vos dinars avec des taux actualisés.</string>
+    <string name="convert_to">Convertir vers</string>
+    <string name="convert">Convertir</string>
+    <string name="converter_result">RÉSULTAT</string>
+    <string name="converter_error_amount">Entrez un montant valide supérieur à 0.</string>
+    <string name="converter_loading">Récupération des taux…</string>
+    <string name="converter_network_error">Connexion impossible. Vérifiez votre réseau.</string>
+    <string name="converter_service_error">Service de change indisponible.</string>
+    <string name="converter_rate_info">1 TND = %1$s %2$s</string>
+    <string name="converter_updated">Taux mis à jour : %1$s</string>
+    <string name="converter_offline">Hors ligne — dernier taux connu (%1$s)</string>
+    <string name="converter_source">Taux fournis par open.er-api.com</string>
+
+    <!-- Profil / paramètres -->
+    <string name="profile_title">Profil</string>
+    <string name="profile_subtitle">Personnalisez votre expérience Budget Étudiant.</string>
+    <string name="student_label">Étudiant · Budget en TND</string>
+    <string name="preferences">Préférences</string>
+    <string name="notifications_title">Alertes budget</string>
+    <string name="notifications_subtitle">80 %, dépassement et objectif atteint</string>
+    <string name="converter_row">Convertisseur de devises</string>
+    <string name="converter_row_subtitle">TND vers EUR, USD ou GBP</string>
+    <string name="history_row">Historique mensuel</string>
+    <string name="history_row_subtitle">Consultez vos dépenses par mois</string>
+    <string name="pdf_row">Exporter un rapport</string>
+    <string name="pdf_row_subtitle">Générez et partagez un PDF</string>
+    <string name="about">À propos</string>
+    <string name="privacy_title">Vos données restent privées</string>
+    <string name="privacy_text">Toutes vos dépenses, budgets et objectifs sont stockés localement dans SQLite sur votre appareil. Aucune donnée financière n’est envoyée à un serveur.</string>
+    <string name="version_label">Version de l’application</string>
+    <string name="app_description">Budget Étudiant vous aide à suivre vos dépenses, respecter votre budget mensuel et atteindre vos objectifs d’épargne.</string>
+    <string name="edit_name_title">Votre prénom</string>
+    <string name="edit_name_hint">Prénom</string>
+    <string name="name_saved">Profil mis à jour</string>
+
+    <!-- Notifications -->
+    <string name="channel_name">Alertes budget</string>
+    <string name="channel_description">Notifications pour le budget et les objectifs d’épargne</string>
+    <string name="notification_budget_80_title">Budget à 80 %</string>
+    <string name="notification_budget_over_title">Budget dépassé</string>
+    <string name="notification_budget_reached_title">Budget atteint</string>
+    <string name="notification_savings_title">Objectif d’épargne atteint 🎉</string>
+    <string name="notification_budget_80_message">Vous avez utilisé %1$d %% de votre budget. Il reste %2$s.</string>
+    <string name="notification_budget_over_message">Vous avez dépassé votre budget de %1$s ce mois-ci.</string>
+    <string name="notification_budget_reached_message">Votre budget de %1$s est entièrement utilisé.</string>
+    <string name="notification_savings_message">Bravo ! Votre objectif « %1$s » est atteint avec %2$s économisés.</string>
+    <string name="permission_notifications_denied">Les notifications sont désactivées. Vous pouvez les activer dans les paramètres Android.</string>
+    <string name="notifications_enabled">Alertes activées</string>
+    <string name="notifications_disabled">Alertes désactivées</string>
+    <string name="budget_amount_label">Budget : %1$s</string>
+    <string name="expenses_this_month">%1$d dépense ce mois</string>
+    <string name="expenses_this_month_plural">%1$d dépenses ce mois</string>
 </resources>
